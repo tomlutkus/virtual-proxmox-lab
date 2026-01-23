@@ -22,6 +22,45 @@
 set -euo pipefail
 
 # Script constants and variables go here
+# Status Colors
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[0;33m'
+BLUE='\033[0;34m'
+NC='\033[0m'  # No Color
+
+# Status functions
+ok()   { echo -e "${GREEN}[OK]${NC}    $1"; }
+info() { echo -e "${BLUE}[INFO]${NC}  $1"; }
+warn() { echo -e "${YELLOW}[WARN]${NC}  $1"; }
+fail() { echo -e "${RED}[FAIL]${NC}  $1"; }
+status() {
+    local label="$1"
+    local status="$2"
+    local color="$3"
+    local width=50
+    local dots=$(( width - ${#label} ))
+    printf "%s %s %b%s%b\n" "$label" "$(printf '.%.0s' $(seq 1 $dots))" "$color" "$status" "$NC"
+}
+
+header() {
+    echo -e "${BLUE}"
+    echo "═══════════════════════════════════════════════════════════"
+    echo "  Virtual Proxmox Lab Deployment"
+    echo "═══════════════════════════════════════════════════════════"
+    echo -e "${NC}"
+}
+
+footer() {
+    echo -e "${GREEN}"
+    echo "═══════════════════════════════════════════════════════════"
+    echo "  Deployment complete. VMs installing."
+    echo "  Run: virsh start pve-{01,02,03} after install completes"
+    echo "═══════════════════════════════════════════════════════════"
+    echo -e "${NC}"
+}
+
+# Functional variables
 CONF_DIR="../configs"
 VM_FILE="${1:-$CONF_DIR/vm.conf}"
 declare -A NETWORKS
@@ -33,24 +72,40 @@ NETWORKS=(
     [vm-br]="vm-br.xml"
 )
 
+header
+
 # Validation checks
 # Check for the VM_FILE
-[[ -f "${VM_FILE}" ]] || { echo "Missing VM file: ${VM_FILE}" >&2; exit 1; }
+[[ -f "${VM_FILE}" ]] || { fail "Missing VM file: ${VM_FILE}" >&2; exit 1; }
 
 # Check for the network configuration XML files
 for NET in "${!NETWORKS[@]}"; do
     FILE="${CONF_DIR}/${NETWORKS[$NET]}"
-    [[ -f "${FILE}" ]] || { echo "Missing network file: ${FILE}" >&2; exit 1; }
+    [[ -f "${FILE}" ]] || { fail "Missing network file: ${FILE}" >&2; exit 1; }
 done
 
 # Define the networks 
 for NET in "${!NETWORKS[@]}"; do
     
-    echo "Configuring: ${NET}"
+    info "Configuring: ${NET}"
 
     FILE="${CONF_DIR}/${NETWORKS[$NET]}"
-    virsh net-define "${FILE}" 2>/dev/null || true
-    virsh net-start "${NET}" 2>/dev/null || true
+    
+    # Define the Network
+    if virsh net-define "${FILE}" 2>/dev/null; then
+        ok "Network ${NET} defined"
+    else
+        warn "Netowrk ${NET} was already defined"
+    fi
+
+    # Start the network
+    if virsh net-start "${NET}" 2>/dev/null; then
+        ok "Network ${NET} started"
+    else
+        warn "Network ${NET} already running"
+    fi
+
+    # Autostart the network
     virsh net-autostart "${NET}" 2>/dev/null || true
 done
 
@@ -69,7 +124,9 @@ while IFS=',' read -r VM MAC_WAN MAC_VM MAC_HA MAC_CEPH MAC_STORE || [[ -n "$VM"
     [[ -f "${ISO_PATH}" ]] || { echo "Missing ISO: ${ISO_PATH}" >&2; exit 1; }
 
     # Deploy the VM
-    virt-install \
+    status "[VM]    ${VM}" "DEPLOYING" "${YELLOW}"
+
+    if virt-install \
       --name "${VM}" \
       --ram "${VM_RAM}" \
       --vcpus "${VM_CPU}" \
@@ -87,8 +144,14 @@ while IFS=',' read -r VM MAC_WAN MAC_VM MAC_HA MAC_CEPH MAC_STORE || [[ -n "$VM"
       --network bridge=vm-br,model=virtio,mac="${MAC_VM}" \
       --network bridge=ha-br,model=virtio,mac="${MAC_HA}" \
       --network bridge=ceph-br,model=virtio,mac="${MAC_CEPH}" \
-      --network bridge=st-br,model=virtio,mac="${MAC_STORE}"
+      --network bridge=st-br,model=virtio,mac="${MAC_STORE}" &>/dev/null; then
+        status "[VM]    ${VM}" "OK" "${GREEN}"
+    else
+        status "[VM]    ${VM}" "FAIL" "${RED}"
+    fi
 
 done < "${VM_FILE}"
+
+footer
 
 exit 0
