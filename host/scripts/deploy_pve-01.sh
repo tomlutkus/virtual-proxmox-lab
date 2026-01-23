@@ -1,13 +1,33 @@
-#!/bin/bash
+#!/usr/bin/env bash
+#
+# Script: deploy_pve-01.sh
+# Purpose: Standalone deployment script for pve-01 VM
+# 
+# Copyright (C) 2026 Thomas Lutkus
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# Compatibility: distro-agnostic
+# Dependencies: libvirt, virt-install
+# Requires: qemu:///system access (root or libvirt group)
+#
+# Usage: ./deploy_pve-01.sh
+#
+# Author: Thomas Lutkus
+# Date: 2026-01-23
+# Version: 1.0
 
-# --- VM-PVE-01 Engineered Specs ---
+set -euo pipefail
+# Engineered Specs
 VM_NAME="pve-01"
 VM_RAM=20480       # 20GiB
 VM_CPU=4
 ISO_PATH="$HOME/libvirt/images/pve-01_automated.iso"
 IMG_DIR="/var/lib/libvirt/images"
 
-# --- Deployment ---
+# Deployment
 virt-install \
   --name "$VM_NAME" \
   --ram "$VM_RAM" \

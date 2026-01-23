@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# Script: pve-iso.sh
+# Script: create-iso.sh
 # Purpose: Simple script to make the process of creating automated PVE installation ISO portable
 # 
 # Copyright (C) 2026 Thomas Lutkus
@@ -9,23 +9,22 @@
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
 #
-# Compatibility: Debian 13
+# Compatibility: Debian 13 (must run inside Distrobox on Arch Linux)
 # Dependencies: proxmox-auto-install-assistant
 # https://pve.proxmox.com/wiki/Automated_Installation#Assistant_Tool
 # Requires: root
 #
-# Usage: ./script-name.sh [options] [arguments]
-#        ./script-name.sh --help
+# Usage: ./create-iso.sh [PVE_NODE]
 #
 # Author: Thomas Lutkus
 # Date: 2026-01-22
-# Version: 1.0
+# Version: 1.1
 
 set -euo pipefail
 
 # Script constants and variables go here
 NODE="${1:-}"
-ISO_FILE="proxmox-ve_9.1-1.iso"
+ISO_FILE="${HOME}/libvirt/images/proxmox-ve_9.1-1.iso"
 ANSWER_FILE="${NODE}/answer_${NODE}.toml"
 FIRST_BOOT="${NODE}/firstboot_${NODE}.sh"
 OUTPUT="${HOME}/libvirt/images/${NODE}_automated.iso"
