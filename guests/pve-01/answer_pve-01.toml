@@ -1,0 +1,37 @@
+[global]
+keyboard = "en-us"
+country = "ie"
+fqdn = "pve-01.lab.local"
+mailto = "admin@lab.local"
+timezone = "Europe/Dublin"
+root-password = "Secret123!"
+root-ssh-keys = [
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOJRY/H7RN+AtTOyQIjV1KjoYX8V+hyi0oVLUkXQ5o3a tlutkus@MS-DEV-012"
+]
+
+[network]
+source = "from-answer"
+cidr = "192.168.122.1/24"
+gateway = "192.168.122.254"
+dns = "1.1.1.1"
+
+[network.filter]
+ID_NET_NAME_MAC = "*020000000101"
+
+[network.interface-name-pinning]
+enabled = true
+
+[network.interface-name-pinning.mapping]
+"02:00:00:00:01:01" = "wan"
+"02:00:00:01:01:01" = "nic_vm"
+"02:00:00:fd:01:01" = "ha"
+"02:00:00:fe:01:01" = "ceph"
+"02:00:00:ff:01:01" = "store"
+
+[disk-setup]
+filesystem = "ext4"
+disk-list = ["sda"]
+
+[first-boot]
+source = "from-iso"
+ordering = "before-network"

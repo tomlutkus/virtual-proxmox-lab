@@ -1,0 +1,5 @@
+<network>
+  <name>ha-br</name>
+  <bridge name="ha-br"/>
+  <ip address="10.0.253.254" netmask="255.255.255.0"/>
+</network>

@@ -1,0 +1,5 @@
+<network>
+  <name>st-br</name>
+  <bridge name="st-br"/>
+  <ip address="10.0.255.254" netmask="255.255.255.0"/>
+</network>

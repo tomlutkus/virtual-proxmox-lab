@@ -1,0 +1,5 @@
+<network>
+  <name>ceph-br</name>
+  <bridge name="ceph-br"/>
+  <ip address="10.0.254.254" netmask="255.255.255.0"/>
+</network>
