@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # --- VM-PVE-03 Engineered Specs ---
-VM_NAME="vm-pve-03"
+VM_NAME="pve-03"
 VM_RAM=20480       # 20GiB
 VM_CPU=4
 ISO_PATH="$HOME/libvirt/images/pve-03-automated.iso"

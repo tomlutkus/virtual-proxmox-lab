@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # --- VM-PVE-02 Engineered Specs ---
-VM_NAME="vm-pve-02"
+VM_NAME="pve-02"
 VM_RAM=20480       # 20GiB
 VM_CPU=4
 ISO_PATH="$HOME/libvirt/images/pve-02-automated.iso"

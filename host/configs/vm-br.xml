@@ -1,0 +1,4 @@
+<network>
+    <name>vm-br</name>
+    <bridge name="vm-br"/>
+</network>

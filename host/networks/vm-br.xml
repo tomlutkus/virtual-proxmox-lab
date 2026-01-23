@@ -1,5 +1,0 @@
-<network>
-  <name>vm-br</name>
-  <bridge name="vm-br"/>
-  <ip address="10.0.1.254" netmask="255.255.255.0"/>
-</network>
