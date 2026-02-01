@@ -95,7 +95,7 @@ for NET in "${!NETWORKS[@]}"; do
     if virsh net-define "${FILE}" 2>/dev/null; then
         ok "Network ${NET} defined"
     else
-        warn "Netowrk ${NET} was already defined"
+    warn "Network ${NET} was already defined"
     fi
 
     # Start the network

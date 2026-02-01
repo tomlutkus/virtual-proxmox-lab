@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# Script: create-iso.sh
+# Script: create_iso.sh
 # Purpose: Simple script to make the process of creating automated PVE installation ISO portable
 # 
 # Copyright (C) 2026 Thomas Lutkus
@@ -14,11 +14,11 @@
 # https://pve.proxmox.com/wiki/Automated_Installation#Assistant_Tool
 # Requires: root
 #
-# Usage: ./create-iso.sh [PVE_NODE]
+# Usage: ./create_iso.sh [PVE_NODE]
 #
 # Author: Thomas Lutkus
 # Date: 2026-01-22
-# Version: 1.1
+# Version: 1.2
 
 set -euo pipefail
 
