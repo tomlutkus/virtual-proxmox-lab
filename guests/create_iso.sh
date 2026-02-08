@@ -18,16 +18,16 @@
 #
 # Author: Thomas Lutkus
 # Date: 2026-01-22
-# Version: 1.2
+# Version: 1.3
 
 set -euo pipefail
 
 # Script constants and variables go here
 NODE="${1:-}"
-ISO_FILE="${HOME}/libvirt/images/proxmox-ve_9.1-1.iso"
+ISO_FILE="/var/lib/libvirt/images/proxmox-ve_9.1-1.iso"
 ANSWER_FILE="${NODE}/answer_${NODE}.toml"
 FIRST_BOOT="${NODE}/firstboot_${NODE}.sh"
-OUTPUT="${HOME}/libvirt/images/${NODE}_automated.iso"
+OUTPUT="/var/lib/libvirt/images/${NODE}_automated.iso"
 
 
 # Verifications to run the script

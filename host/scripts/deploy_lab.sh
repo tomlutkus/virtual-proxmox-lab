@@ -115,7 +115,7 @@ while IFS=',' read -r VM MAC_WAN MAC_VM MAC_HA MAC_CEPH MAC_STORE || [[ -n "$VM"
     echo "Deploying: ${VM}"
 
     # VM Configuration Attributes
-    VM_RAM=20480 # 20GiB
+    VM_RAM=16384 # 16GiB
     VM_CPU=4
     ISO_PATH="/var/lib/libvirt/images/${VM}_automated.iso"
     IMG_DIR="/var/lib/libvirt/images"
